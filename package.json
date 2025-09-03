@@ -1,0 +1,30 @@
+{
+  "name": "outreach-ai",
+  "version": "1.0.0",
+  "description": "AI-powered cold email generator that extracts job data and creates personalized emails",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && uvicorn main:app --reload",
+    "dev:frontend": "cd frontend && npm run dev",
+    "start": "node backend/server.js",
+    "build": "cd frontend && npm run build",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "react",
+    "api",
+    "cold-email",
+    "job-application",
+    "ai",
+    "groq"
+  ],
+  "author": "OutReach AI Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
