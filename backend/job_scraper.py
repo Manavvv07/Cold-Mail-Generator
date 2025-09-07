@@ -23,7 +23,7 @@ class JobScraper:
         self.llm = ChatGroq(
             temperature=0,
             groq_api_key=os.getenv("GROQ_API_KEY"),
-            model_name="llama3-70b-8192"
+            model_name="llama-3.1-8b-instant"  # Updated to a currently supported model
         )
         
         # ENHANCEMENT: Switched to a "few-shot" prompt with examples

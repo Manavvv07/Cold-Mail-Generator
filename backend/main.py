@@ -2,6 +2,7 @@ import os
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, HttpUrl, field_validator
 from typing import List, Optional
 import re
@@ -9,8 +10,8 @@ import asyncio
 from dotenv import load_dotenv
 
 # Import our existing modules
-from backend.email_service import EmailService
-from backend.job_scraper import JobScraper
+from email_service import EmailService
+from job_scraper import JobScraper
 
 # Load environment variables
 load_dotenv()
@@ -43,7 +44,11 @@ class PersonalInfo(BaseModel):
     email: str
     skills: str
     portfolio: Optional[HttpUrl] = None
+    phone: Optional[str] = None
+    linkedin: Optional[HttpUrl] = None
+    github: Optional[HttpUrl] = None
     experience: Optional[str] = None
+    location: Optional[str] = None
 
     @field_validator('email')
     @classmethod
@@ -67,6 +72,9 @@ class JobData(BaseModel):
     skills: List[str]
     experience: Optional[str] = None
     location: Optional[str] = None
+    salary: Optional[str] = None
+    remote: Optional[bool] = None
+    jobType: Optional[str] = None
 
 class EmailGenerationRequest(BaseModel):
     jobData: JobData
@@ -76,6 +84,8 @@ class EmailResponse(BaseModel):
     subject: str
     content: str
     confidence_score: Optional[float] = None
+    suggestions: Optional[List[str]] = None
+    personalization_level: Optional[str] = None
 
 class HealthResponse(BaseModel):
     status: str
@@ -163,19 +173,25 @@ async def get_supported_sites():
 # Error handlers
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request, exc):
-    return {
-        "error": True,
-        "message": exc.detail,
-        "status_code": exc.status_code
-    }
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error": True,
+            "message": exc.detail,
+            "status_code": exc.status_code
+        }
+    )
 
 @app.exception_handler(Exception)
 async def general_exception_handler(request, exc):
-    return {
-        "error": True,
-        "message": "An unexpected error occurred",
-        "status_code": 500
-    }
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": True,
+            "message": "An unexpected error occurred",
+            "status_code": 500
+        }
+    )
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))

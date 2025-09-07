@@ -14,7 +14,7 @@ class EmailService:
         self.llm = ChatGroq(
             temperature=0.3,  # Slightly more creative for email generation
             groq_api_key=os.getenv("GROQ_API_KEY"),
-            model_name="llama3-70b-8192"
+            model_name="llama-3.1-8b-instant"  # Updated to a currently supported model
         )
         
         # Email generation prompt template
@@ -29,12 +29,20 @@ class EmailService:
             Required Skills: {skills}
             Experience Level: {experience}
             Location: {location}
+            Salary: {salary}
+            Remote: {remote}
+            Job Type: {jobType}
             
             ### APPLICANT INFORMATION:
             Name: {name}
             Email: {email}
             Skills & Experience: {applicant_skills}
             Portfolio: {portfolio}
+            Phone: {phone}
+            LinkedIn: {linkedin}
+            GitHub: {github}
+            Personal Experience: {personal_experience}
+            Personal Location: {personal_location}
             
             ### INSTRUCTIONS:
             1. Create a compelling subject line that mentions the specific role and company
@@ -83,10 +91,18 @@ class EmailService:
                 "skills": ", ".join(job_data.get("skills", [])),
                 "experience": job_data.get("experience", ""),
                 "location": job_data.get("location", ""),
+                "salary": job_data.get("salary", ""),
+                "remote": "Yes" if job_data.get("remote") else "No" if job_data.get("remote") is not None else "",
+                "jobType": job_data.get("jobType", ""),
                 "name": personal_info.get("name", ""),
                 "email": personal_info.get("email", ""),
                 "applicant_skills": personal_info.get("skills", ""),
-                "portfolio": personal_info.get("portfolio", "")
+                "portfolio": personal_info.get("portfolio", ""),
+                "phone": personal_info.get("phone", ""),
+                "linkedin": personal_info.get("linkedin", ""),
+                "github": personal_info.get("github", ""),
+                "personal_experience": personal_info.get("experience", ""),
+                "personal_location": personal_info.get("location", "")
             }
             
             # Generate email using LLM
@@ -130,7 +146,13 @@ class EmailService:
         return {
             "subject": subject,
             "content": content,
-            "confidence_score": confidence_score
+            "confidence_score": confidence_score,
+            "suggestions": [
+                "Consider mentioning specific projects from your portfolio",
+                "Reference recent company news or achievements",
+                "Include a specific timeline for follow-up"
+            ],
+            "personalization_level": "high" if confidence_score > 0.7 else "medium" if confidence_score > 0.4 else "low"
         }
 
     def _generate_fallback_email(self, job_data: Dict, personal_info: Dict) -> str:
