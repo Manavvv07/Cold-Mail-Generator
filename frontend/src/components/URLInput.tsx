@@ -28,7 +28,8 @@ export const URLInput: React.FC<URLInputProps> = ({ onSubmit, isLoading }) => {
         'bamboohr.com',
         'careers.google.com',
         'jobs.apple.com',
-        'amazon.jobs'
+        'amazon.jobs',
+        'github.careers'  // Added GitHub's job board
       ];
       
       const isSupported = supportedDomains.some(domain => 
@@ -160,7 +161,7 @@ export const URLInput: React.FC<URLInputProps> = ({ onSubmit, isLoading }) => {
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-1 h-1 bg-purple-400 rounded-full" />
-                Company Sites
+                GitHub
               </div>
             </div>
           </div>

@@ -163,6 +163,7 @@ async def get_supported_sites():
             "Indeed", 
             "Glassdoor",
             "AngelList",
+            "GitHub",
             "Company Career Pages",
             "Stack Overflow Jobs",
             "Remote.co",
