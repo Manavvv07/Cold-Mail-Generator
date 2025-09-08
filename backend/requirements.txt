@@ -3,5 +3,5 @@ uvicorn
 python-dotenv
 langchain-groq
 langchain-community
-playwright
+selenium
 beautifulsoup4

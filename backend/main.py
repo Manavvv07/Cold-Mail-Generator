@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 # Import our existing modules
 from email_service import EmailService
-from job_scraper import JobScraper
+from job_scraper_selenium import JobScraper
 
 # Load environment variables
 load_dotenv()
@@ -200,6 +200,6 @@ if __name__ == "__main__":
         "main:app",
         host="0.0.0.0",
         port=port,
-        reload=True,
+        reload=False,
         log_level="info"
     )
